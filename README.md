@@ -15,9 +15,11 @@
 ##嵌套结果映射查询
 
 博客：http://blog.csdn.net/isea533/article/details/46852387
+
 源码分支：[nestedResultMaps](https://github.com/usemybatis/learnMyBatis/tree/nestedResultMaps)
 
 ##嵌套查询
 
 博客：http://blog.csdn.net/isea533/article/details/46852387
+
 源码分支：[nestedQueries-lazy](https://github.com/usemybatis/learnMyBatis/tree/nestedQueries-lazy)
