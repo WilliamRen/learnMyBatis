@@ -1,6 +1,10 @@
 package tk.mybatis.simpletest.model;
 
-public class Blog {
+import java.io.Serializable;
+
+public class Blog implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String id;
 
     private String title;

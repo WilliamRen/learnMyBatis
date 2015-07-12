@@ -1,60 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="tk.mybatis.simpletest.mapper.BlogMapper" >
+<mapper namespace="tk.mybatis.simpletest.mapper.BlogMapper">
 
-  <resultMap id="userMap" type="tk.mybatis.simpletest.model.BlogUser">
-  	<id property="userid" column="userid"/>
-	<result property="username" column="username" />
-	<result property="password" column="password" />
-	<result property="userinfo" column="userinfo" />
-  </resultMap>
-  
-  <resultMap id="BlogDtoMap" type="tk.mybatis.simpletest.model.BlogDto">
-  	<constructor>
-		<idArg column="id" javaType="String"/>  	
-  	</constructor>
-  	<result property="title" column="title" />
-  	<result property="url" column="url" />
-  	<result property="userid" column="userid" />
-  	<association property="user" resultMap="userMap" />
-  	<collection property="posts" ofType="tk.mybatis.simpletest.model.BlogPostDto">
-  		<id property="postid" column="postid" />
-  		<!-- <result property="userid" column="userid" /> -->
-  		<result property="postdate" column="postdate" />
-  		<result property="postinfo" column="postinfo" />
-  		<association property="user" resultMap="userMap"/>
-  		<collection property="comments" ofType="tk.mybatis.simpletest.model.BlogComments">
-  			<id property="commentid" column="commentid" />
-  			<result property="username" column="username2"/>
-  			<result property="msg" column="msg"/>
-  		</collection>
-  	</collection>
-  </resultMap>
-  
-  <select id="selectById" resultMap="BlogDtoMap" parameterType="java.lang.String" >
+    <resultMap id="userMap" type="tk.mybatis.simpletest.model.BlogUser">
+        <id property="userid" column="userid"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="userinfo" column="userinfo"/>
+    </resultMap>
+
+    <resultMap id="BlogDtoMap" type="tk.mybatis.simpletest.model.BlogDto">
+        <constructor>
+            <idArg column="id" javaType="String"/>
+        </constructor>
+        <result property="title" column="title"/>
+        <result property="url" column="url"/>
+        <result property="userid" column="userid"/>
+        <association property="user" column="userid" fetchType="lazy" select="selectUser"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="BlogDtoMap" parameterType="java.lang.String">
     select a.id,
        a.title,
        a.userid,
-       a.url,
-       b.username,
-       b.password,
-       b.userinfo,
-       c.postid,
-       c.postdate,
-       c.postinfo,
-       d.commentid,
-       d.username username2,
-       d.msg
+       a.url
       from blog a
-
-      left join blog_user b
-        on a.userid = b.userid
-
-      left join blog_post c
-        on a.userid = c.userid
-
-      left join blog_comments d
-        on c.postid = d.postid
      where id = #{id}
-  </select>
+    </select>
+
+    <select id="selectUser" resultMap="userMap">
+        select userid,username,password,userinfo from blog_user where userid = #{userid};
+    </select>
+
 </mapper>
